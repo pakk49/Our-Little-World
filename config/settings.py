@@ -6,8 +6,8 @@ SECRET_KEY=os.environ.get("DJANGO_SECRET_KEY","development-key-not-for-productio
 DEBUG=os.environ.get("DJANGO_DEBUG","0")=="1"
 ALLOWED_HOSTS=os.environ.get("DJANGO_ALLOWED_HOSTS","localhost,127.0.0.1").split(",")
 CSRF_TRUSTED_ORIGINS=[x for x in os.environ.get("CSRF_TRUSTED_ORIGINS","").split(",") if x]
-INSTALLED_APPS=["django.contrib.admin","django.contrib.auth","django.contrib.contenttypes","django.contrib.sessions","django.contrib.messages","django.contrib.staticfiles","storages","world"]
-MIDDLEWARE=["django.middleware.security.SecurityMiddleware","django.contrib.sessions.middleware.SessionMiddleware","django.middleware.common.CommonMiddleware","django.middleware.csrf.CsrfViewMiddleware","django.contrib.auth.middleware.AuthenticationMiddleware","django.contrib.messages.middleware.MessageMiddleware","django.middleware.clickjacking.XFrameOptionsMiddleware"]
+INSTALLED_APPS=["django.contrib.admin","django.contrib.auth","django.contrib.contenttypes","django.contrib.sessions","django.contrib.messages","django.contrib.staticfiles","storages","rest_framework","rest_framework.authtoken","corsheaders","world"]
+MIDDLEWARE=["corsheaders.middleware.CorsMiddleware","django.middleware.security.SecurityMiddleware","django.contrib.sessions.middleware.SessionMiddleware","django.middleware.common.CommonMiddleware","django.middleware.csrf.CsrfViewMiddleware","django.contrib.auth.middleware.AuthenticationMiddleware","django.contrib.messages.middleware.MessageMiddleware","django.middleware.clickjacking.XFrameOptionsMiddleware"]
 ROOT_URLCONF="config.urls"
 TEMPLATES=[{"BACKEND":"django.template.backends.django.DjangoTemplates","DIRS":[BASE_DIR/"templates"],"APP_DIRS":True,"OPTIONS":{"context_processors":["django.template.context_processors.debug","django.template.context_processors.request","django.contrib.auth.context_processors.auth","django.contrib.messages.context_processors.messages"]}}]
 WSGI_APPLICATION="config.wsgi.application"
@@ -46,3 +46,6 @@ if S3_BUCKET:
 else:
     STORAGES={"default":{"BACKEND":"django.core.files.storage.FileSystemStorage"},"staticfiles":{"BACKEND":"django.contrib.staticfiles.storage.StaticFilesStorage"}}
     MEDIA_ROOT=BASE_DIR/"media"
+
+CORS_ALLOWED_ORIGINS=[x for x in os.environ.get("CORS_ALLOWED_ORIGINS","https://pakk49.github.io").split(",") if x]
+REST_FRAMEWORK={"DEFAULT_AUTHENTICATION_CLASSES":["rest_framework.authentication.TokenAuthentication"],"DEFAULT_PERMISSION_CLASSES":["rest_framework.permissions.IsAuthenticated"]}

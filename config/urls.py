@@ -7,5 +7,6 @@ urlpatterns=[
  path("login/",auth_views.LoginView.as_view(template_name="world/login.html"),name="login"),
  path("logout/",auth_views.LogoutView.as_view(),name="logout"),
  path("private-image/<int:pk>/",private_image,name="private_image"),
+ path("api/",include("world.api_urls")),
  path("",include("world.urls")),
 ]

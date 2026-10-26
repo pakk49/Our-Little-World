@@ -26,7 +26,7 @@ async function fetchAll(){let [m,n,l]=await Promise.all([api("memories/"),api("n
 async function render(){
   images.forEach(URL.revokeObjectURL);images=[];
   const hash=(location.hash||"#home").slice(1),[section,id]=hash.split("/");
-  if(!BASE){nav.hidden=true;signout.hidden=true;show(template()+'<div class="card"><h2>เตรียมพร้อมเปิดใช้งาน ♡</h2><p>หน้าเว็บบน GitHub Pages พร้อมแล้ว แต่ยังไม่ได้กำหนด URL ของ Django Backend จึงยังไม่สามารถเข้าสู่ระบบหรือบันทึกข้อมูลได้</p><p class="subtle">ผู้ดูแล: Deploy Django API ผ่าน HTTPS แล้วเพิ่ม Repository variable ชื่อ API_BASE_URL และรัน Workflow ใหม่</p></div>');return}
+  if(!BASE){signout.hidden=true;window.ourworldPreview();return}
   if(!token){nav.hidden=true;signout.hidden=true;show('<div class="card login"><div class="eyebrow">JUST THE TWO OF US</div><h1>ยินดีต้อนรับกลับบ้าน ♡</h1><p class="lead">พื้นที่ส่วนตัวของเราสองคน</p><form id="login"><div class="field"><label>ชื่อผู้ใช้</label><input name="username" required autocomplete="username"></div><div class="field"><label>รหัสผ่าน</label><input type="password" name="password" required autocomplete="current-password"></div><button class="btn">เข้าสู่โลกของเรา</button></form></div>');document.getElementById("login").onsubmit=async e=>{e.preventDefault();let b=new FormData(e.currentTarget);try{let d=await api("login/",{method:"POST",body:{username:b.get("username"),password:b.get("password")}});token=d.token;sessionStorage.setItem("ourworld_token",token);me=d.user;location.hash="#home";await render()}catch(err){alert(err.message)}};return}
   try{
     if(!me)me=(await api("me/")).user;

@@ -1,0 +1,41 @@
+name: Deploy Our Little World to GitHub Pages
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'site/**'
+      - '.github/workflows/pages.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: true
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: \${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set frontend configuration
+        env:
+          API_BASE_URL: \${{ vars.API_BASE_URL }}
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          base=os.environ.get("API_BASE_URL","").rstrip("/")
+          if base and not base.startswith("https://"):
+              raise SystemExit("API_BASE_URL must begin with https://")
+          Path("site/config.js").write_text("window.OUR_WORLD_API_BASE="+json.dumps(base)+";\n",encoding="utf-8")
+          PY
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - id: deployment
+        uses: actions/deploy-pages@v4

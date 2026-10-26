@@ -1,0 +1,1 @@
+{% extends "world/base.html" %}{% block content %}<div class="login card"><div class="eyebrow">JUST THE TWO OF US</div><h1>ยินดีต้อนรับกลับบ้าน ♡</h1><p>โลกเล็ก ๆ ที่มีแค่เราสองคน</p><form method="post">{% csrf_token %}{{ form.as_p }}<button class="primary" type="submit">เข้าสู่โลกของเรา</button></form></div>{% endblock %}
